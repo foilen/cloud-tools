@@ -9,6 +9,7 @@ Environment:
 - AZURE_SUBSCRIPTION_ID
 - KEEP_ALIVE
 
+For sub-domain:
 ```
 docker rm -f dynamic-dns ; \
 docker run -d --restart always \
@@ -20,5 +21,20 @@ docker run -d --restart always \
   --name dynamic-dns \
   foilen/foilen-cloud-tools:latest /usr/bin/az-dns-update \
     myResourceGroup example.com test.example.com && \
+docker logs -f dynamic-dns
+```
+
+For main domain:
+```
+docker rm -f dynamic-dns ; \
+docker run -d --restart always \
+  --env AZURE_CLIENT_ID=xxxxxxxx \
+  --env AZURE_CLIENT_SECRET=xxxxxxxx \
+  --env AZURE_TENANT_ID=xxxxxxxx \
+  --env AZURE_SUBSCRIPTION_ID=xxxxxxxx \
+  --env KEEP_ALIVE=true \
+  --name dynamic-dns \
+  foilen/foilen-cloud-tools:latest /usr/bin/az-dns-update \
+    myResourceGroup example.com @.example.com && \
 docker logs -f dynamic-dns
 ```
