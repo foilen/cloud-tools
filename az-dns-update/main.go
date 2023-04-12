@@ -49,6 +49,12 @@ func main() {
 		}
 	}
 
+	// Find the IP address
+	previousIP := ""
+	if recordSet.Properties != nil && len(recordSet.Properties.ARecords) == 1 {
+		previousIP = *recordSet.Properties.ARecords[0].IPv4Address
+	}
+
 	// Loop to update DNS record every 10 minutes
 	for {
 
@@ -59,7 +65,7 @@ func main() {
 		}
 
 		// Check if the IP address needs to be updated
-		if recordSet.Properties == nil || len(recordSet.Properties.ARecords) != 1 || *recordSet.Properties.ARecords[0].IPv4Address != currentIP {
+		if previousIP != currentIP {
 			fmt.Println("Updating DNS record", domain, "with new IP address", currentIP)
 
 			recordSet := armdns.RecordSet{
@@ -77,6 +83,7 @@ func main() {
 			if err != nil {
 				log.Fatal("Failed to update the record", err)
 			}
+			previousIP = currentIP
 		} else {
 			fmt.Println("IP address is up-to-date")
 		}
