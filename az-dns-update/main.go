@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"io"
@@ -66,7 +65,7 @@ func main() {
 
 		// Check if the IP address needs to be updated
 		if previousIP != currentIP {
-			fmt.Println("Updating DNS record", domain, "with new IP address", currentIP)
+			log.Println("Updating DNS record", domain, "with new IP address", currentIP)
 
 			recordSet := armdns.RecordSet{
 				Properties: &armdns.RecordSetProperties{
@@ -85,7 +84,7 @@ func main() {
 			}
 			previousIP = currentIP
 		} else {
-			fmt.Println("IP address is up-to-date")
+			log.Println("IP address is up-to-date")
 		}
 
 		if keepAlive == "true" {
